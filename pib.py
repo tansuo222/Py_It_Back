@@ -65,12 +65,12 @@ def pib_row(row, nums):
 				if not has_num:
 					has_num = True
 					nums_t[0] -= 1
-					if nums_t[0] == 0 and now == width-1:
+					if nums_t[0] == 0 and now == width-1 and len(nums_t) == 1:
 						valid_list.append(res)
 						break
 				else:
 					nums_t[0] -= 1
-					if nums_t[0] == 0 and now == width-1:
+					if nums_t[0] == 0 and now == width-1 and len(nums_t) == 1:
 						valid_list.append(res)
 						break
 			now += 1
@@ -87,8 +87,8 @@ def main():
 	for i in range(0,10):
 		row.append(False)
 
-	result = pib_row(row, [7,1])
-	print (result[0])
+	result = pib_row(row, [1,5,1])
+	print (len(result[0]))
 	print (result[1])
 
 	pass
