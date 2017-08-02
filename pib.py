@@ -86,10 +86,13 @@ def pib_row(row, nums):
 
 
 def main():
-	npm = PixImg(5, 10)
-	print(npm.getRow(0))
-	print(npm.getColumn(1))
-	print(npm.data)
+	row_headers = [[3],[5],[5],[3],[1]]
+	column_headers = [[2],[4],[5],[4],[2]]
+	npm = PixImg(5, 5,row_headers,column_headers)
+
+	result = pib_row(npm.getRow(0),npm.row_h[0])
+
+	print(result[0])
 
 
 	pass

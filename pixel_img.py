@@ -21,9 +21,11 @@ class PixImg:
 		pass
 
 	#初始化
-	def __init__(self,row,column):
+	def __init__(self,row,column,row_headers,column_headers):
 		self.row_n = row
 		self.col_n = column
+		self.row_h = row_headers
+		self.col_h = column_headers
 		self.data = []
 		for i in range(0,self.row_n):
 			nl = []
