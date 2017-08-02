@@ -28,7 +28,7 @@ def pib_row(row, nums):
 			dnum += 1
 	#当墨点总数超出额定数量的时候，返回错误
 	if anum + len(nums) - 1 > len(row) or dnum > anum:
-		return [[],False]
+		return []
 	#正常情况，则枚举可能性
 	random_list = []
 	usable_pos = []
@@ -79,20 +79,135 @@ def pib_row(row, nums):
 			now += 1
 
 	if len(valid_list) == 0:
-		return [[],False]
+		return []
 	else:
-		return [valid_list,True]
+		return valid_list
+	pass
+
+def pib_pi(pi):
+	return _pin_pi_iteration(pi, 0, 0, pi.row_n, pi.col_n)
+	#return _pin_pi_frsc_iteration(pi,0,0)
+	pass
+
+#先行后列遍历可能性（迭代）
+def _pin_pi_frsc_iteration(pi,row_now,column_now):
+	#当两边都不剩的时候，证明判断到了结尾
+	if row_now == pi.row_n and column_now == pi.col_n:
+		res = []
+		res.append(pi)
+		pi.print()
+		print('------------------------------------')
+		return res
+	#当测试行的时候
+	if row_now < pi.row_n:
+		#获取当前行以及行头
+		row = pi.getRow(row_now)
+		header = pi.row_h[row_now]
+		#得到所有可能的结果
+		result = pib_row(row, header)
+		#print(result)
+		#如果没有合适的结果，返回空值
+		if len(result) == 0:
+			return []
+		#否则对所有可能的选项进行迭代
+		else:
+			end_result = []
+			#对于每一种情况
+			for r in result:
+				npi = pi.copy()
+				npi.apply_row_with(r,row_now)
+				t_result = _pin_pi_frsc_iteration(npi, row_now+1, column_now)
+				end_result.extend(t_result)
+			return end_result
+	else:
+		#获取当前列以及行头
+		column = pi.getColumn(column_now)
+		header = pi.col_h[column_now]
+		#得到所有可能的结果
+		result = pib_row(column, header)
+		#print(result)
+		#如果没有合适的结果，返回空值
+		if len(result) == 0:
+			return []
+		#否则对所有可能的选项进行迭代
+		else:
+			end_result = []
+			#对于每一种情况
+			for r in result:
+				npi = pi.copy()
+				npi.apply_column_with(r,column_now)
+				t_result = _pin_pi_frsc_iteration(npi, row_now, column_now+1)
+				end_result.extend(t_result)
+			return end_result
 	pass
 
 
+def _pin_pi_iteration(pi,row_now,column_now,row_all,column_all):
+	#通过进行比例，判断下一个验证的是行还是列
+	rate1 = row_now/row_all
+	rate2 = column_now/column_all
+	#当两边都不剩的时候，证明判断到了结尾
+	if rate1 == 1 and rate2 == 1:
+		if not pi.finish():
+			return []
+		res = []
+		res.append(pi)
+		pi.print()
+		print('------------------------------------')
+		return res
+	#当测试行的时候
+	if rate1 <= rate2:
+		#获取当前行以及行头
+		row = pi.getRow(row_now)
+		header = pi.row_h[row_now]
+		#得到所有可能的结果
+		result = pib_row(row, header)
+		#print(result)
+		#如果没有合适的结果，返回空值
+		if len(result) == 0:
+			return []
+		#否则对所有可能的选项进行迭代
+		else:
+			end_result = []
+			#对于每一种情况
+			for r in result:
+				npi = pi.copy()
+				npi.apply_row_with(r,row_now)
+				t_result = _pin_pi_iteration(npi, row_now+1, column_now, row_all, column_all)
+				end_result.extend(t_result)
+			return end_result
+	else:
+		#获取当前列以及行头
+		column = pi.getColumn(column_now)
+		header = pi.col_h[column_now]
+		#得到所有可能的结果
+		result = pib_row(column, header)
+		#print(result)
+		#如果没有合适的结果，返回空值
+		if len(result) == 0:
+			return []
+		#否则对所有可能的选项进行迭代
+		else:
+			end_result = []
+			#对于每一种情况
+			for r in result:
+				npi = pi.copy()
+				npi.apply_column_with(r,column_now)
+				t_result = _pin_pi_iteration(npi, row_now, column_now+1, row_all, column_all)
+				end_result.extend(t_result)
+			return end_result
+	pass
+
+
+#对一整张图像进行运算，得到所有可能的结果
 def main():
 	row_headers = [[3],[5],[5],[3],[1]]
 	column_headers = [[2],[4],[5],[4],[2]]
 	npm = PixImg(5, 5,row_headers,column_headers)
 
-	result = pib_row(npm.getRow(0),npm.row_h[0])
+	result = pib_pi(npm)
 
-	print(result[0])
+	#print(result)
 
 
 	pass
