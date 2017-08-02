@@ -9,8 +9,11 @@
 # -mail: nerver0stop@163.com
 #
 # * the comments are Chinese
+# 
+# pib cornel
 
 from itertools import combinations
+from pixel_img import PixImg
 
 #对单独的一行进行运算，产生所有可能的结果
 def pib_row(row, nums):
@@ -83,13 +86,11 @@ def pib_row(row, nums):
 
 
 def main():
-	row = []
-	for i in range(0,10):
-		row.append(False)
+	npm = PixImg(5, 10)
+	print(npm.getRow(0))
+	print(npm.getColumn(1))
+	print(npm.data)
 
-	result = pib_row(row, [1,5,1])
-	print (len(result[0]))
-	print (result[1])
 
 	pass
 	
